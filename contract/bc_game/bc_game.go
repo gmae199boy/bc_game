@@ -57,7 +57,7 @@ func (g *GameCC) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return g.readUserInfo(stub, args)
 	case "readUserList":
 		//create a new marble
-		return g.readUserList(stub, args)
+		return g.readUserList(stub)
 	default:
 		//error
 		fmt.Println("invoke did not find func: " + function)
