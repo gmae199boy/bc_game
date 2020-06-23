@@ -55,7 +55,7 @@ async function cc_call(fn_name, args) {
   else if (fn_name == "readUserInfo")
     result = await contract.evaluateTransaction("readUserInfo", args);
   else if (fn_name == "readUserList")
-    result = await contract.evaluateTransaction("readUserList", args);
+    result = await contract.evaluateTransaction("readUserList");
   else result = "not supported function";
 
   return result;

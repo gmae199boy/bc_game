@@ -92,7 +92,7 @@ func (g *GameCC) readUserInfo(stub shim.ChaincodeStubInterface, args []string) p
 	return shim.Success(UserAsBytes)
 }
 
-func (g *GameCC) readUserList(stub.ChaincodeStubInterface, args []string) pb.Response {
+func (g *GameCC) readUserList(stub.ChaincodeStubInterface) pb.Response {
 	iter, err := stub.GetStateByPartialCompositeKey("User", []string{})
 	if err != nil {
 		return shim.Errer(err)
