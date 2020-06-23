@@ -3,4 +3,4 @@
 ./teardown.sh
 ./generate.sh
 ./start.sh
-./cc_donation.sh
+./bc_game.sh
