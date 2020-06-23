@@ -1,7 +1,6 @@
 package main
 
 import (
-	"gametransfer"
 	"encoding/json"
 	"fmt"
 	// "strconv"
@@ -101,14 +100,14 @@ func (g *GameCC) readUserList(stub.ChaincodeStubInterface, args []string) pb.Res
 
 	defer iter.Close()
 
-	users := []*gametransfer.User{}
+	users := []*User{}
 
 	for iter.HasNext() {
 		kv, err := iter.Next()
 		if err != nil {
 			return shim.Errer(err)
 		}
-		user := new(gametransfer.User)
+		user := new(User)
 		err = json.Unmarshal(kv.Value, user)
 		if err != nil {
 			return shim.Errer(err)
