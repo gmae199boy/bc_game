@@ -10,6 +10,13 @@ import (
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
+type User struct {
+	Id string
+	Name string
+	WinRate int
+	LoseLate int
+}
+
 func checkLen(logger *shim.ChaincodeLogger, expected int, args []string) error {
 	if len(args) < expected {
 		mes := fmt.Sprintf(
@@ -17,7 +24,7 @@ func checkLen(logger *shim.ChaincodeLogger, expected int, args []string) error {
 			len(args),
 			expected,
 		)
-		logger.Warnig(mes)
+		logger.Warning(mes)
 		return errors.New(mes)
 	}
 	return nil
@@ -31,7 +38,7 @@ type GameCC struct {
 // ===========================
 func (g *GameCC) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	logger := shim.NewLogger("Game !")
-	logger.info("chaincode initalized")
+	logger.Info("chaincode initalized")
 	return shim.Success([]byte{})
 }
 
@@ -67,12 +74,12 @@ func (s *GameCC) addUser(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	UserAsBytes, _ := json.Marshal(args[0])
 	key, err := stub.CreateCompositeKey("User", []string{args[0]})
 	if err != nil {
-		return shim.Errer(err)
+		return shim.Error(err)
 	}
 
 	err = stub.PutState(key, UserAsBytes)
 	if err != nil {
-		return shim.Errer(err)
+		return shim.Error(err)
 	}
 
 	return shim.Success(nil)
@@ -85,17 +92,17 @@ func (g *GameCC) readUserInfo(stub shim.ChaincodeStubInterface, args []string) p
 	}
 	key, err := stub.CreateCompositeKey("User", []string{args[0]})
 	if err != nil {
-		return shim.Errer(err)
+		return shim.Error(err)
 	}
 	UserAsBytes, _ := stub.GetState(key)
 
 	return shim.Success(UserAsBytes)
 }
 
-func (g *GameCC) readUserList(stub.ChaincodeStubInterface) pb.Response {
+func (g *GameCC) readUserList(stub shim.ChaincodeStubInterface) pb.Response {
 	iter, err := stub.GetStateByPartialCompositeKey("User", []string{})
 	if err != nil {
-		return shim.Errer(err)
+		return shim.Error(err)
 	}
 
 	defer iter.Close()
@@ -105,12 +112,12 @@ func (g *GameCC) readUserList(stub.ChaincodeStubInterface) pb.Response {
 	for iter.HasNext() {
 		kv, err := iter.Next()
 		if err != nil {
-			return shim.Errer(err)
+			return shim.Error(err)
 		}
 		user := new(User)
 		err = json.Unmarshal(kv.Value, user)
 		if err != nil {
-			return shim.Errer(err)
+			return shim.Error(err)
 		}
 		users = append(users, user)
 	}

@@ -5,12 +5,7 @@ import (
 	"time"
 )
 
-type User struct {
-	Id string
-	Name string
-	WinRate int
-	LoseLate int
-}
+
 
 type GameTransfer interface {
 	AddUser(shim.ChaincodeStubInterface, *User) error
