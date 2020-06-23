@@ -74,12 +74,12 @@ func (s *GameCC) addUser(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	UserAsBytes, _ := json.Marshal(args[0])
 	key, err := stub.CreateCompositeKey("User", []string{args[0]})
 	if err != nil {
-		return shim.Error(err)
+		return shim.Error("err")
 	}
 
 	err = stub.PutState(key, UserAsBytes)
 	if err != nil {
-		return shim.Error(err)
+		return shim.Error("err")
 	}
 
 	return shim.Success(nil)
@@ -92,7 +92,7 @@ func (g *GameCC) readUserInfo(stub shim.ChaincodeStubInterface, args []string) p
 	}
 	key, err := stub.CreateCompositeKey("User", []string{args[0]})
 	if err != nil {
-		return shim.Error(err)
+		return shim.Error("err")
 	}
 	UserAsBytes, _ := stub.GetState(key)
 
@@ -102,7 +102,7 @@ func (g *GameCC) readUserInfo(stub shim.ChaincodeStubInterface, args []string) p
 func (g *GameCC) readUserList(stub shim.ChaincodeStubInterface) pb.Response {
 	iter, err := stub.GetStateByPartialCompositeKey("User", []string{})
 	if err != nil {
-		return shim.Error(err)
+		return shim.Error("err")
 	}
 
 	defer iter.Close()
@@ -112,17 +112,19 @@ func (g *GameCC) readUserList(stub shim.ChaincodeStubInterface) pb.Response {
 	for iter.HasNext() {
 		kv, err := iter.Next()
 		if err != nil {
-			return shim.Error(err)
+			return shim.Error("err")
 		}
 		user := new(User)
 		err = json.Unmarshal(kv.Value, user)
 		if err != nil {
-			return shim.Error(err)
+			return shim.Error("err")
 		}
 		users = append(users, user)
 	}
 
-	return shim.Success(users)
+	UserAsBytes, err := json.Marshal(users)
+
+	return shim.Success(UserAsBytes)
 }
 
 // ===================================================================================
