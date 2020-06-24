@@ -70,14 +70,21 @@ func (s *GameCC) addUser(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	if len(args) != 1 {
 		return shim.Error("fail!")
 	}
-
 	UserAsBytes, _ := json.Marshal(args[0])
 	key, err := stub.CreateCompositeKey("User", []string{args[0]})
 	if err != nil {
 		return shim.Error("err")
 	}
 
-	err = stub.PutState(key, UserAsBytes)
+	user := new(User)
+	user.WinRate = 0
+	user.LoseLate = 0
+	user.Id = 0
+	user.name = args[0]
+
+	uab, _ := json.Marshal(user)
+
+	err = stub.PutState(key, uab)
 	if err != nil {
 		return shim.Error("err")
 	}
