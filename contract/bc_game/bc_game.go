@@ -79,8 +79,8 @@ func (s *GameCC) addUser(stub shim.ChaincodeStubInterface, args []string) pb.Res
 	user := new(User)
 	user.WinRate = 0
 	user.LoseLate = 0
-	user.Id = 0
-	user.name = args[0]
+	user.Id ="asd"
+	user.Name = args[0]
 
 	uab, _ := json.Marshal(user)
 
